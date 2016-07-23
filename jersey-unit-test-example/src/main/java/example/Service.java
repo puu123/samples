@@ -1,5 +1,7 @@
 package example;
 
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,5 +26,9 @@ public interface Service {
     @POST
     @Path("echo") 
     public Foo echo(Foo foo);
+    
+    @POST
+    @Path("empty")   
+    Map empty(Foo foo);
 }
 

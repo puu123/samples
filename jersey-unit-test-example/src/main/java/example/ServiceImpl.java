@@ -1,5 +1,8 @@
 package example;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,6 +33,13 @@ public class ServiceImpl implements Service {
     public Foo echo(Foo foo) {
     	foo.setBar(foo.getBar()+":追記");
     	return foo;
+    }
+    
+    @POST
+    @Path("empty") 
+    public Map empty(Foo foo) {
+    	
+    	return new HashMap<>();
     }
 }
 
