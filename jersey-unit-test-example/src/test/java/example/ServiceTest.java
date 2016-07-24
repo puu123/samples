@@ -145,23 +145,22 @@ public class ServiceTest extends JerseyTest {
     	Service service = WebResourceFactory.newResource(Service.class, client().target("http://localhost:9999"));
     	Foo foo = new Foo();
     	foo.setBar("barほげ");
-    	HttpResponse res = new HttpResponse("{\"poo\":123}");
+    	HttpResponse res = new HttpResponse("{\"bar\":123}");
     	TestHttpServer server = new TestHttpServer(res, 9999);
     	Thread thread = new Thread(server);
     	thread.setDaemon(true);
     	thread.start();
-    	Thread.sleep(1000);
-    	//Foo foo2 =
+    	Foo foo2 =
     			//service.empty(foo); 
     			service.echo(foo);
     	//thread.join();
-    	//server.close();
+    	server.close();
     	System.out.println("["+server.request.header+"]");
     	System.out.println("["+server.request.body+"]");
     	System.out.println("["+res.header+"]");
     	System.out.println("["+res.body+"]");
 
-    	//System.out.println(foo2);
+    	System.out.println(foo2);
     }
     
     @Test
@@ -210,8 +209,7 @@ public class ServiceTest extends JerseyTest {
     	
     	@Override
 		public void run() {
-			try {	
-				Socket socket = this.serverSocket.accept();
+			try (Socket socket = this.serverSocket.accept();) {
 				request  = new HttpRequest(socket);
 	    		response.writeResponse(socket);
 			} catch(Exception ex) {
@@ -368,10 +366,8 @@ public class ServiceTest extends JerseyTest {
 	    	makeHeader();
 
 	        writer.write(header);
-	        writer.write(body);
-	        
+	        writer.write(body);	        
 	        writer.flush();
-	        writer.close();
 	    }
 	    
 	    void makeHeader() {
