@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class Server implements Runnable {
+public class SimpleServer implements Runnable {
 	
    	ServerSocket serverSocket;
 	
@@ -14,10 +14,10 @@ public class Server implements Runnable {
 	
 	Response response;
 	
-	public Server(int port) throws Exception {
+	public SimpleServer(int port) throws Exception {
 		this(new Response(), port);
 	}
-	public Server(Response res, int port) throws Exception {
+	public SimpleServer(Response res, int port) throws Exception {
 		this.response = res;
 		this.serverSocket = new ServerSocket();
         this.serverSocket.setReuseAddress(true);
