@@ -2,9 +2,9 @@ package example;
 
 
 import org.apache.commons.io.IOUtils;
-import org.glassfish.grizzly.http.server.HttpHandler;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.Request;
+//import org.glassfish.grizzly.http.server.HttpHandler;
+//import org.glassfish.grizzly.http.server.HttpServer;
+//import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.client.spi.Connector;
@@ -13,6 +13,10 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.glassfish.hk2.api.Factory;
+import org.glassfish.hk2.utilities.Binder;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -54,8 +58,23 @@ public class ServiceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
+    	
         enable(TestProperties.LOG_TRAFFIC);
         enable(TestProperties.DUMP_ENTITY);
+        
+        // HK2
+        Binder binder = new AbstractBinder() {
+            @Override
+            protected void configure() {
+                //bindFactory() + to() でモックに差し替え
+                //bindFactory(MockHelloLogicFactory.class).to(HelloLogic.class);
+            }
+        };
+        
+        new ResourceConfig()
+        //.packages(true, MyApplication.class.getPackage().getName())
+        .register(binder);
+        
         return new RestApplication();
     }
     
@@ -165,27 +184,27 @@ public class ServiceTest extends JerseyTest {
     
     @Test
     public void echoTest5() throws Exception {
-    	// DynamicProxy Client 生成.
-    	Service service = WebResourceFactory.newResource(Service.class, client().target("http://localhost:9999"));
-    	HttpServer server = HttpServer.createSimpleServer(".", 9999);
-    	server.getServerConfiguration().addHttpHandler(
-    		    new HttpHandler() {
-					public void service(Request request, org.glassfish.grizzly.http.server.Response response) throws Exception {
-	 		            response.setContentType("application/json");
-    		            response.setContentLength(2);
-    		            response.getWriter().write("{}");					}
-				},"/tests/echo");
-    	try {
-    	    server.start();
-        	Foo foo = new Foo();
-        	foo.setBar("barほげ");
-        	Foo foo2 = service.echo(foo); 
-			//service.echo(foo);
-    	    System.out.println("Press any key to stop the server...");
-    	    System.in.read();
-    	} catch (Exception e) {
-    	    System.err.println(e);
-    	}
+//    	// DynamicProxy Client 生成.
+//    	Service service = WebResourceFactory.newResource(Service.class, client().target("http://localhost:9999"));
+//    	HttpServer server = HttpServer.createSimpleServer(".", 9999);
+//    	server.getServerConfiguration().addHttpHandler(
+//    		    new HttpHandler() {
+//					public void service(Request request, org.glassfish.grizzly.http.server.Response response) throws Exception {
+//	 		            response.setContentType("application/json");
+//    		            response.setContentLength(2);
+//    		            response.getWriter().write("{}");					}
+//				},"/tests/echo");
+//    	try {
+//    	    server.start();
+//        	Foo foo = new Foo();
+//        	foo.setBar("barほげ");
+//        	Foo foo2 = service.echo(foo); 
+//			//service.echo(foo);
+//    	    System.out.println("Press any key to stop the server...");
+//    	    System.in.read();
+//    	} catch (Exception e) {
+//    	    System.err.println(e);
+//    	}
     }
     
     public static class TestHttpServer implements Runnable {

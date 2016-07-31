@@ -11,15 +11,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import foo.HogeSupport;
+
 @Path("tests")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class ServiceImpl implements Service {
+public class ServiceImpl extends HogeSupport implements Service {
 
     @GET
     @Path("{id}")
     public String getId(@PathParam("id") String id) {
-        return "id: " + id;
+        return "id: " + id + ":" + getHoge().greeting();
     }
 
     @GET
