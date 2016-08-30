@@ -42,7 +42,7 @@ public class Client01 {
 		String rtn = hello.sayHello("こんにちは");
 		System.out.println(rtn);
 		
-		String aaa = hello.echoBinaryAsString("aaaaa".getBytes());
-		System.out.println(aaa);
+		//String aaa = hello.echoBinaryAsString("aaaaa".getBytes());
+		//System.out.println(aaa);
 	}
 }

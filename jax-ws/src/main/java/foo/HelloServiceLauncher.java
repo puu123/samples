@@ -83,10 +83,12 @@ public class HelloServiceLauncher {
 			
 			// SOAPテスト
 	    	Endpoint ep = Endpoint.create(new Hello());
-	        ep.publish(server.createContext("/hello"));
+	      
 	        List<Handler> handlerChain = ep.getBinding().getHandlerChain();
 	        handlerChain.add(new SOAPLoggingHandler());
 	        ep.getBinding().setHandlerChain(handlerChain);
+	        
+	        ep.publish(server.createContext("/hello"));
 			
 			// 簡易HTTPSサーバを別スレッドで起動
 			server.start();

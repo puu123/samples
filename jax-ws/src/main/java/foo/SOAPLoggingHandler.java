@@ -1,6 +1,7 @@
 package foo;
 
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,11 +48,40 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
     private void logToSystemOut(SOAPMessageContext smc) {
         Boolean outboundProperty = (Boolean)
             smc.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+        
+
 
         if (outboundProperty.booleanValue()) {
             out.println("\nOutbound message:");
+            out.println("レスポンスヘッダー");
+            Map<String, List<String>> responseHeaders = (Map<String, List<String>>) smc
+                    .get(SOAPMessageContext.HTTP_RESPONSE_HEADERS);
+            if (responseHeaders.isEmpty()) {
+            	//-Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
+            	//http://stackoverflow.com/questions/13285342/log-jax-ws-http-request-and-response
+            	System.out.println("からです！");
+            }
+            for (Map.Entry<String, List<String>> entry: responseHeaders.entrySet()) {
+    			out.print(entry.getKey()+" : ");
+    			for (String value : entry.getValue()) {
+    				out.print(value+",");
+    			}
+    			out.println();
+    		}
+            
         } else {
-            out.println("\nInbound message:");
+            
+        	out.println("\nInbound message:");
+            out.println("リクエストヘッダー");
+            Map<String, List<String>> responseHeaders = (Map<String, List<String>>) smc
+                    .get(SOAPMessageContext.HTTP_REQUEST_HEADERS);
+            for (Map.Entry<String, List<String>> entry: responseHeaders.entrySet()) {
+    			out.print(entry.getKey()+" : ");
+    			for (String value : entry.getValue()) {
+    				out.print(value+",");
+    			}
+    			out.println();
+    		}
         }
 
         SOAPMessage message = smc.getMessage();
