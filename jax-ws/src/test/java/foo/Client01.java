@@ -5,6 +5,8 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import com.sun.xml.ws.client.BindingProviderProperties;
+
 
 public class Client01 {
 	
@@ -38,11 +40,22 @@ public class Client01 {
 		QName qname = new QName("http://foo/", "HelloService");
 		Service service = Service.create(url, qname);
 		
+		//http://otndnld.oracle.co.jp/document/products/wls/docs103/webserv/jws.html
+		//BindingProviderProperties.JAXWS_CLIENT_HANDLE_PROPERTY;
+		
 		HelloWorldService hello = service.getPort(HelloWorldService.class);
 		String rtn = hello.sayHello("こんにちは");
 		System.out.println(rtn);
 		
 		//String aaa = hello.echoBinaryAsString("aaaaa".getBytes());
 		//System.out.println(aaa);
+		
+		//https://metro.java.net/nonav/1.2/guide/Access_HTTP_headers_in_a_Handler.html
+		//http://stackoverflow.com/questions/1445919/how-to-enable-wire-logging-for-a-java-httpurlconnection-traffic
+		//http://www.javaspecialists.eu/archive/Issue169.html
+		//https://developers.google.com/api-client-library/java/google-http-java-client/transport
+		
+		//intercepterとかないです・・・。SOAP Message Handlerとかある。request/responseのヘッダーはclientはレスポンスだけ、サーバはリクエストだけ。
+		//http://stackoverflow.com/questions/1398362/what-are-jax-ws-interceptors-also-known-as-handlers
 	}
 }

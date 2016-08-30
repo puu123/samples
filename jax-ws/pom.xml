@@ -25,7 +25,7 @@
 				<executions>
 					<execution>
 						<id>generate-wsdl</id>
-						<phase>process-classes</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>wsgen</goal>
 						</goals>
@@ -40,7 +40,7 @@
 					</execution>
 					<execution>
 						<id>generate-ws-client</id>
-						<phase>process-classes</phase>
+						<phase>generate-test-sources</phase>
 						<goals>
 							<goal>wsimport</goal>
 						</goals>
