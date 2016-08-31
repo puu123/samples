@@ -15,7 +15,7 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
  * This simple SOAPHandler will output the contents of incoming
  * and outgoing messages.
  */
-public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
+public class SOAPClientLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
     // change this to redirect output if desired
     private static PrintStream out = System.out;
@@ -51,9 +51,9 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
         if (outboundProperty.booleanValue()) {
             out.println("\nOutbound message:");
-            out.println("レスポンスヘッダー");
+            out.println("リクエスト");
             Map<String, List<String>> responseHeaders = (Map<String, List<String>>) smc
-                    .get(SOAPMessageContext.HTTP_RESPONSE_HEADERS);
+                    .get(SOAPMessageContext.HTTP_REQUEST_HEADERS);
             if (responseHeaders == null || responseHeaders.isEmpty()) {
             	//-Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
             	//http://stackoverflow.com/questions/13285342/log-jax-ws-http-request-and-response
@@ -71,9 +71,9 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
         } else {
             
         	out.println("\nInbound message:");
-            out.println("リクエストヘッダー");
+            out.println("レスポンスヘッダー");
             Map<String, List<String>> responseHeaders = (Map<String, List<String>>) smc
-                    .get(SOAPMessageContext.HTTP_REQUEST_HEADERS);
+                    .get(SOAPMessageContext.HTTP_RESPONSE_HEADERS);
             if (responseHeaders == null || responseHeaders.isEmpty()) {
             	//-Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
             	//http://stackoverflow.com/questions/13285342/log-jax-ws-http-request-and-response

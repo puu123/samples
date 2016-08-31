@@ -1,11 +1,20 @@
 package foo;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.handler.MessageContext;
 
 import com.sun.xml.ws.client.BindingProviderProperties;
+import com.sun.xml.ws.client.RequestContext;
 
 
 public class Client01 {
@@ -44,6 +53,19 @@ public class Client01 {
 		//BindingProviderProperties.JAXWS_CLIENT_HANDLE_PROPERTY;
 		
 		HelloWorldService hello = service.getPort(HelloWorldService.class);
+		
+		
+		Map<String, List<String>> httpHeaders = new HashMap<>();
+		httpHeaders.put("Accept-Encoding", Collections.singletonList("gzip"));
+		Map<String, Object> reqContext = ((BindingProvider)hello).getRequestContext();
+		reqContext.put(MessageContext.HTTP_REQUEST_HEADERS, httpHeaders);
+		
+		Binding binding = ((BindingProvider)hello).getBinding();
+		List<Handler> handlerList = binding.getHandlerChain();
+	    handlerList.add(new SOAPClientLoggingHandler());
+		binding.setHandlerChain(handlerList);
+		
+		
 		String rtn = hello.sayHello("こんにちは");
 		System.out.println(rtn);
 		
